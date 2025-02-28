@@ -127,3 +127,58 @@ class Fajax {
 }
 
 export default Fajax;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var FAJAX = {
+//     get: function (url, callback) {
+//         setTimeout(function () {
+//             var data = JSON.parse(localStorage.getItem(url)) || [];
+//             callback(data);
+//         }, 500);  // Simulating network delay
+//     },
+
+//     post: function (url, newData, callback) {
+//         setTimeout(function () {
+//             var data = JSON.parse(localStorage.getItem(url)) || [];
+//             data.push(newData);
+//             localStorage.setItem(url, JSON.stringify(data));
+//             callback({ success: true });
+//         }, 500);
+//     },
+
+//     put: function (url, updatedData, callback) {
+//         setTimeout(function () {
+//             var data = JSON.parse(localStorage.getItem(url)) || [];
+//             var index = data.findIndex(item => item.id === updatedData.id);
+//             if (index !== -1) {
+//                 data[index] = updatedData;
+//                 localStorage.setItem(url, JSON.stringify(data));
+//             }
+//             callback({ success: index !== -1 });
+//         }, 500);
+//     },
+
+//     delete: function (url, id, callback) {
+//         setTimeout(function () {
+//             var data = JSON.parse(localStorage.getItem(url)) || [];
+//             var newData = data.filter(item => item.id !== id);
+//             localStorage.setItem(url, JSON.stringify(newData));
+//             callback({ success: data.length !== newData.length });
+//         }, 500);
+//     }
+// };

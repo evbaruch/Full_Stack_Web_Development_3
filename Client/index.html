@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA Multi-Template App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .hidden {
+            display: none;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        nav button {
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <button onclick="showTemplate('contact')">Contacts</button>
+        <button onclick="showTemplate('tasks')">Tasks</button>
+        <button onclick="showTemplate('notes')">Notes</button>
+        <button onclick="showTemplate('events')">Events</button>
+    </nav>
+    
+    <div class="container">
+        <div id="contact" class="template-section">
+            <h2>Contact Manager</h2>
+            <input type="text" id="contactName" placeholder="Enter contact name">
+            <input type="text" id="contactPhone" placeholder="Enter contact phone">
+            <button onclick="addContact()">Add</button>
+            <div id="contactList"></div>
+        </div>
+        
+        <div id="tasks" class="template-section hidden">
+            <h2>Task Manager</h2>
+            <input type="text" id="taskName" placeholder="Enter task">
+            <button onclick="addTask()">Add</button>
+            <div id="taskList"></div>
+        </div>
+        
+        <div id="notes" class="template-section hidden">
+            <h2>Notes</h2>
+            <textarea id="noteText" placeholder="Write a note..."></textarea>
+            <button onclick="saveNote()">Save</button>
+            <div id="noteList"></div>
+        </div>
+        
+        <div id="events" class="template-section hidden">
+            <h2>Event Planner</h2>
+            <input type="text" id="eventName" placeholder="Enter event name">
+            <input type="date" id="eventDate">
+            <button onclick="addEvent()">Add</button>
+            <div id="eventList"></div>
+        </div>
+    </div>
+    
+    <template id="contactTemplate">
+        <div>
+            <span class="contact-name"></span> - <span class="contact-phone"></span>
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+    
+    <template id="taskTemplate">
+        <div>
+            <span class="task-name"></span>
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+    
+    <template id="noteTemplate">
+        <div>
+            <p class="note-text"></p>
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+    
+    <template id="eventTemplate">
+        <div>
+            <span class="event-name"></span> on <span class="event-date"></span>
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+    
+    <script>
+        function showTemplate(templateId) {
+            document.querySelectorAll('.template-section').forEach(section => section.classList.add('hidden'));
+            document.getElementById(templateId).classList.remove('hidden');
+        }
+        
+        let contacts = [], tasks = [], notes = [], events = [];
+
+        function renderList(listId, array, templateId, nameClass, extraClass) {
+            const list = document.getElementById(listId);
+            list.innerHTML = '';
+            const template = document.getElementById(templateId).content;
+            array.forEach((item, index) => {
+                const clone = document.importNode(template, true);
+                clone.querySelector('.' + nameClass).textContent = item.name;
+                if (extraClass) clone.querySelector('.' + extraClass).textContent = item.extra;
+                clone.querySelector('.delete-btn').addEventListener('click', () => {
+                    array.splice(index, 1);
+                    renderList(listId, array, templateId, nameClass, extraClass);
+                });
+                list.appendChild(clone);
+            });
+        }
+        
+        function addContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            if (name && phone) {
+                contacts.push({ name, phone });
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactPhone').value = '';
+                renderList('contactList', contacts, 'contactTemplate', 'contact-name', 'contact-phone');
+            }
+        }
+        
+        function addTask() {
+            const task = document.getElementById('taskName').value.trim();
+            if (task) {
+                tasks.push({ name: task });
+                document.getElementById('taskName').value = '';
+                renderList('taskList', tasks, 'taskTemplate', 'task-name');
+            }
+        }
+        
+        function saveNote() {
+            const note = document.getElementById('noteText').value.trim();
+            if (note) {
+                notes.push({ name: note });
+                document.getElementById('noteText').value = '';
+                renderList('noteList', notes, 'noteTemplate', 'note-text');
+            }
+        }
+        
+        function addEvent() {
+            const name = document.getElementById('eventName').value.trim();
+            const date = document.getElementById('eventDate').value;
+            if (name && date) {
+                events.push({ name, extra: date });
+                document.getElementById('eventName').value = '';
+                document.getElementById('eventDate').value = '';
+                renderList('eventList', events, 'eventTemplate', 'event-name', 'event-date');
+            }
+        }
+    </script>
+</body>
+</html>
