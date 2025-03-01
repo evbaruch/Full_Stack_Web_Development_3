@@ -1,0 +1,197 @@
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5dc; /* Cream color */
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+}
+/* Container */
+.container {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+  margin: 50px; /* Add margin */
+  max-width: 80%; /* Full width */
+  width: 80%;
+  box-shadow: none; /* Remove box-shadow */
+}
+
+/* Navigation Bar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+
+/* Hidden Sections */
+.hidden {
+  display: none;
+}
+
+/* Form Styles */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #333;
+  font-size: 14px;
+  background: none;
+  color: #333;
+}
+
+/* Button Styling */
+button {
+  width: 100%;
+  padding: 10px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+
+/* Contact List */
+#contactList {
+  margin-top: 10px;
+  max-height: 250px; /* Scrollable list */
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Contact Actions */
+.contact-actions button {
+  background: none;
+  font-size: 12px;
+  padding: 5px;
+  margin-left: 5px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.contact-actions button.edit {
+  color: #28a745;
+}
+
+.contact-actions button.edit:hover {
+  color: #1e7e34;
+}
+
+.contact-actions button.delete {
+  color: #dc3545;
+}
+
+.contact-actions button.delete:hover {
+  color: #a71d2a;
+}
+
+/* Edit Section */
+.edit-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.edit-actions button {
+  width: 48%;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .container {
+      max-width: 90%;
+  }
+
+  nav {
+      flex-direction: row;
+      justify-content: space-around;
+  }
+
+  nav button {
+      font-size: 14px;
+  }
+}
+
+/* New Contact Form Buttons */
+.contact-actions button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+
+.contact-actions button:hover {
+  background: #0056b3;
+}
+
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px; /* Add some space between the text and the button */
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Existing styles for .add-contact button */
+.add-contact {
+  background-color: #007BFF; /* Set background color */
+  background-image: url("../DATA/icons8-plus-128.png");
+  background-size: 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 40px;
+  height: 40px; 
+  color: white;
+  border-radius: 30px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.add-contact:hover {
+  transform: scale(1.1);
+}
