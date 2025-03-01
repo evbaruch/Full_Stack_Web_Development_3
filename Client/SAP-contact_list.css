@@ -64,6 +64,11 @@ button {
   font-weight: bold;
 }
 
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
 
 /* Contact List */
 #contactList {
@@ -115,33 +120,6 @@ button {
   background-repeat: no-repeat;
 }
 
-.contact-actions button.edit {
-  color: #28a745;
-}
-
-.contact-actions button.edit:hover {
-  color: #1e7e34;
-}
-
-.contact-actions button.delete {
-  color: #dc3545;
-}
-
-.contact-actions button.delete:hover {
-  color: #a71d2a;
-  transform: scale(1.1);
-}
-
-/* Edit Section */
-.edit-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.edit-actions button {
-  width: 48%;
-}
 
 /* Responsive Design */
 @media (max-width: 500px) {
@@ -191,8 +169,4 @@ header {
   text-transform: uppercase;
   font-weight: bold;
   transition: background-color 0.3s ease-in-out;
-}
-
-.add-contact:hover {
-  transform: scale(1.1);
 }
