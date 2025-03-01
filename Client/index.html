@@ -28,7 +28,7 @@
           <h1>Contact List</h1>
           <div class="header-actions">
             <button
-              class="add-contact"
+              class="add-contact-button"
               onclick="showTemplate('create')"
             ></button>
           </div>
@@ -56,8 +56,8 @@
         <img src="..\DATA\user-icon.png" alt="contact" />
         <span class="contact-name"></span> - <span class="contact-phone"></span>
         <div class="contact-actions">
-          <button onclick="goToEditContact(event)">Edit</button>
-          <button onclick="deleteContact(event)">Delete</button>
+          <button class="edit" style="background-image: url(../DATA/icons8-edit-48.png);"  onclick="goToEditContact(event)"></button>
+          <button class="delete" style="background-image: url(../DATA/icons8-garbage-bin-64.png);" onclick="deleteContact(event)"></button>
         </div>
       </div>
     </template>
