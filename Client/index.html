@@ -8,22 +8,21 @@
     <script src="SPA-home.js"></script>
   </head>
   <body>
-    <nav id="nav-bar">TODO: Add navigation bar</nav>
+    <nav id="nav-bar" class="hidden">
+      <button onclick="logout()">Logout</button>  
+    </nav>
 
     <div class="container">
       <div id="create" class="template-section hidden">
         <h2>Add Contact</h2>
         <input type="text" id="contactName" placeholder="Enter contact name" />
-        <input
-          type="text"
-          id="contactPhone"
-          placeholder="Enter contact phone"
-        />
+        <input type="text" id="contactPhone" placeholder="Enter contact phone" />
+        <input type="email" id="contactEmail" placeholder="Enter contact email" />
         <button onclick="addContact()">Add</button>
         <button onclick="showTemplate('read')">Cancel</button>
       </div>
 
-      <div id="read" class="template-section">
+      <div id="read" class="template-section hidden">
         <header>
           <h1>Contact List</h1>
           <div class="header-actions">
@@ -33,35 +32,60 @@
             ></button>
           </div>
         </header>
+        <div class="contact-headers">
+          <span class="header-tel">Tel</span>
+          <span class="header-name">Name</span>
+          <span class="header-email">Email</span>
+        </div>
         <div id="contactList"></div>
       </div>
 
       <div id="edit" class="template-section hidden">
         <h2>Edit Contact</h2>
         <input type="text" id="editContactName" placeholder="Enter new name" />
-        <input
-          type="text"
-          id="editContactPhone"
-          placeholder="Enter new phone"
-        />
+        <input type="text" id="editContactPhone" placeholder="Enter new phone" />
+        <input type="email" id="editContactEmail" placeholder="Enter new email" />
         <div class="edit-actions">
           <button onclick="saveEditContact()">Save</button>
           <button onclick="showTemplate('read')">Cancel</button>
         </div>
       </div>
+
+      <div id="signin" class="template-section">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter username" />
+        <input type="password" id="password" placeholder="Enter password" />
+        <button onclick="login()">Login</button>
+        <button onclick="showTemplate('signup')">Signup</button>
+      </div>
+
+      <div id="signup" class="template-section hidden">
+        <h2>Signup</h2>
+        <input type="text" id="signupUsername" placeholder="Enter username" />
+        <input type="password" id="signupPassword" placeholder="Enter password" />
+        <button onclick="signup()">Signup</button>
+        <button onclick="showTemplate('signin')">Cancel</button>
+      </div>
     </div>
 
     <template id="contactTemplate">
       <div class="contact-item">
-        <img src="..\DATA\user-icon.png" alt="contact" />
-        <span class="contact-name"></span> - <span class="contact-phone"></span>
+        <span class="contact-phone"></span>
+        <span class="contact-name"></span>
+        <span class="contact-email"></span>
         <div class="contact-actions">
-          <button class="edit" style="background-image: url(../DATA/icons8-edit-48.png);"  onclick="goToEditContact(event)"></button>
-          <button class="delete" style="background-image: url(../DATA/icons8-garbage-bin-64.png);" onclick="deleteContact(event)"></button>
+          <button
+            class="edit"
+            style="background-image: url(../Client/media/icons8-edit-48.png)"
+            onclick="goToEditContact(event)"
+          ></button>
+          <button
+            class="delete"
+            style="background-image: url(../Client/media/icons8-garbage-bin-64.png);"
+            onclick="deleteContact(event)"
+          ></button>
         </div>
       </div>
     </template>
   </body>
 </html>
-
-
