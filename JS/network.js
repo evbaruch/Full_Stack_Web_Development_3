@@ -1,3 +1,5 @@
+import Server from "..Server/server.js";
+
 const Network = {
     sendRequest(request, data) {
         const delay = Math.random() * 2000 + 1000;

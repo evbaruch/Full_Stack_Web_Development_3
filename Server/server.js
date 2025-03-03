@@ -6,3 +6,5 @@ const Server = {
         callback(response);
     }
 };
+
+export default Server;
