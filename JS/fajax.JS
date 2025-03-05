@@ -12,12 +12,12 @@ class FXMLHttpRequest {
       this.method = method;
       this.url = url;
       this.readyState = 1;
-      this._triggerOnLoad();
+      //this._triggerOnLoad();// why is this here?
   }
 
   send(data = null) {
       this.readyState = 2;
-      this._triggerOnLoad();
+      //this._triggerOnLoad();
       
       Network.sendRequest(this, data);
   }
