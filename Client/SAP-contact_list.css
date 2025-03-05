@@ -72,15 +72,15 @@ button:hover {
 
 /* Contact Headers */
 .contact-headers {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  width: 80%;
+  grid-template-columns: 1fr 1fr 1fr auto; /* 3 columns and auto for actions */
   padding: 10px;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
 
 .contact-headers span {
-  flex: 1;
   text-align: center;
 }
 
@@ -97,8 +97,8 @@ button:hover {
 }
 
 .contact-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto; /* 3 columns and auto for actions */
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
@@ -106,7 +106,6 @@ button:hover {
 }
 
 .contact-item span {
-  flex: 1;
   text-align: center;
 }
 
@@ -120,10 +119,11 @@ button:hover {
 /* Contact Actions */
 .contact-actions {
   display: flex;
+  justify-content: left;
+  gap: 5px;
   background: none;
   font-size: 12px;
   padding: 5px;
-  margin-left: 5px;
   border: none;
   cursor: pointer;
   text-transform: uppercase;
@@ -156,12 +156,10 @@ button:hover {
 /* Header Actions */
 .header-actions {
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: flex-end;
   gap: 10px; /* Add some space between the text and the button */
 }
-
-
 
 header {
   display: flex;
