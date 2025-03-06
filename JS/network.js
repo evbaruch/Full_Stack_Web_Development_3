@@ -5,7 +5,7 @@ const Network = {
         const delay = Math.random() * 2000 + 1000;
         const dropProbability = Math.random();
         
-        setTimeout(() => {
+        // setTimeout(() => {
             if (dropProbability < 0.2) { // 20% chance of dropping the request
                 console.warn("FAJAX: Request lost in the network simulation.");
                 return;
@@ -21,7 +21,8 @@ const Network = {
                 request.readyState = 4;
                 request._triggerOnLoad();
             });
-        }, delay);
+        // }, delay);
+        
     }
 };
 

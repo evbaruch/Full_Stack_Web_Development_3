@@ -38,8 +38,8 @@ function addContact() {
 
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
-    xhr.onload = (response) => {
-      console.log(response);
+    xhr.onload = () => {
+      console.log();
     };
     xhr.send({ name, phone, email });
 
@@ -133,13 +133,17 @@ function signup() {
   if (username && password) {
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/users/signup");
-    xhr.onload = (response) => {
+    xhr.onload = () => {
+
       if (xhr.readyState === 4 && xhr.status === 200) {
-        userID = response.data.id;
+        userID = JSON.parse(xhr.responseText).data.id;
+        console.log(userID);
         alert("Signup successful");
       }
     };
     xhr.send({ username, password });
+    // loadContacts();
+    showTemplate("read");
   } else {
     alert("Please enter a username and password");
   }
@@ -151,9 +155,10 @@ function login() {
   if (username && password) {
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/users");
-    xhr.onload = (response) => {
+    xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        userID = response.data.id
+        userID = JSON.parse(xhr.responseText).data.id;
+        console.log(userID);
         alert("Login successful");
       }
     };

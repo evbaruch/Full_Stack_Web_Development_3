@@ -3,7 +3,7 @@ const Server = {
     console.log(`Server received request: ${method} ${url}`, data);
 
     let response = { status: 400, data: { message: "Invalid Request" } };
-
+    url = url.replace("http://localhost:3000/" , "");
     if (url.startsWith("/users")) {
       // Example: GET /users, POST /users
       response = UserDB.handleRequest(method, url, data);
