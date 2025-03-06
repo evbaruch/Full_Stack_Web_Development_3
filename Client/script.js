@@ -1,6 +1,7 @@
 import FXMLHttpRequest from "../JS/FAJAX.JS";
 
 let contacts = [];
+let userID = null;
 let editIndex = null;
 
 document.addEventListener("DOMContentLoaded", loadContacts);
@@ -21,12 +22,14 @@ function showTemplate(templateId) {
 
 function loadContacts() {
   const xhr = new FXMLHttpRequest();
-  xhr.open("GETAll", "http://localhost:3000/allContacts");
-  xhr.send();
+  xhr.open("GET", "http://localhost:3000/contacts/all");
   xhr.onload = () => {
-    contacts.push(JSON.parse(xhr.responseText));
-    renderList();
+    alert(xhr.responseText);
   };
+  xhr.send().data.forEach((contact) => {
+    contacts.push(contact);
+  });
+  renderList();
 }
 
 function addContact() {
@@ -37,9 +40,9 @@ function addContact() {
     contacts.push({ name, phone, email });
 
     const xhr = new FXMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/contacts");
+    xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
     xhr.onload = () => {
-      console.log("Contact added successfully");
+      console.log(xhr.responseText);
     };
     xhr.send({ name, phone, email });
 
@@ -153,13 +156,12 @@ function login() {
   const password = document.getElementById("password").value.trim();
   if (username && password) {
     const xhr = new FXMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/users/POST");
+    xhr.open("POST", "http://localhost:3000/users");
     xhr.onload = () => {
       //if the post fails, the user is not in the database
       alert(xhr.responseText);
     };
     userID = xhr.send({ username, password }).data.id;
-    localStorage.setItem("currentUser", userID);
     showTemplate("read");
   } else {
     alert("Please enter a username and password");
@@ -167,14 +169,8 @@ function login() {
 }
 
 function logout() {
-  const xhr = new FXMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/logout");
-  xhr.onload = () => {
-    console.log("Logout successful");
-  };
-  xhr.send();
-  // Clear user-related data from local storage
-  localStorage.removeItem("currentUser");
+  userID = null;
+  contacts = [];
   // Redirect to the login template
   showTemplate("signin");
 }
