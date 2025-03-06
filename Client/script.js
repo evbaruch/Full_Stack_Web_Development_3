@@ -3,6 +3,7 @@ import FXMLHttpRequest from "../JS/FAJAX.JS";
 let contacts = [];
 let userID = null;
 let editIndex = null;
+let contactId = null;
 
 function showTemplate(templateId) {
   document
@@ -37,14 +38,13 @@ function addContact() {
   const phone = document.getElementById("contactPhone").value.trim();
   const email = document.getElementById("contactEmail").value.trim();
   if (name && phone && email) {
-    contacts.push({ name, phone, email });
-
     const xhr = new FXMLHttpRequest();
     console.log(userID);
     xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 201) {
-        console.log(xhr.responseText);
+        let contactID = JSON.parse(xhr.responseText).contactId;
+        contacts.push({ name, phone, email, contactID });
       }
     };
     xhr.send({ name, phone, email, userID });
@@ -95,6 +95,15 @@ function goToEditContact(event) {
   document.getElementById("editContactName").value = contacts[editIndex].name;
   document.getElementById("editContactPhone").value = contacts[editIndex].phone;
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
+  contacts.findIndex((c) => {
+    if (
+      c.contactName === contacts[editIndex].name &&
+      c.contactPhone === contacts[editIndex].phone
+    ) {
+      contactId = c.contactID;
+    }
+  });
+
   showTemplate("edit");
 }
 
@@ -103,14 +112,24 @@ function saveEditContact() {
   const newPhone = document.getElementById("editContactPhone").value.trim();
   const newEmail = document.getElementById("editContactEmail").value.trim();
   if (newName && newPhone && newEmail) {
-    contacts[editIndex] = { name: newName, phone: newPhone, email: newEmail };
+    contacts[editIndex] = {
+      name: newName,
+      phone: newPhone,
+      email: newEmail,
+      contactID: contactId,
+    };
 
     const xhr = new FXMLHttpRequest();
-    xhr.open("PUT", `http://localhost:3000/contacts/${editIndex}`);
+    xhr.open("PUT", `http://localhost:3000/contacts/${userID}/${contactId}`);
     xhr.onload = () => {
       console.log("Contact updated successfully");
     };
-    xhr.send({ name: newName, phone: newPhone, email: newEmail });
+    xhr.send({
+      name: newName,
+      phone: newPhone,
+      email: newEmail,
+      userID: userID,
+    });
 
     renderList();
     showTemplate("read");
@@ -119,16 +138,16 @@ function saveEditContact() {
 
 function deleteContact(event) {
   const index = event.target.getAttribute("data-index");
-  contacts.splice(index, 1);
-
+  contactId = contacts[index].contactID;
   const xhr = new FXMLHttpRequest();
-  xhr.open("DELETE", `http://localhost:3000/contacts/${index}`);
+  xhr.open("DELETE", `http://localhost:3000/contacts/${userID}/${contactId}`);
   xhr.onload = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log("Contact deleted successfully");
+      contacts.splice(index, 1);
     }
   };
-  xhr.send();
+  xhr.send({ userID: userID, contactId: contactId });
 
   renderList();
 }
