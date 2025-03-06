@@ -137,7 +137,7 @@ function signup() {
 
       if (xhr.readyState === 4 && xhr.status === 201) {
         console.log(xhr.responseText);
-        userID = JSON.parse(xhr.responseText).data.id;
+        userID = JSON.parse(xhr.responseText).id;
         console.log(userID);
         alert("Signup successful");
       }
@@ -159,7 +159,7 @@ function login() {
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         console.log(xhr.responseText);
-        userID = JSON.parse(xhr.responseText).data.id;
+        userID = JSON.parse(xhr.responseText).id;
         console.log(userID);
         alert("Login successful");
       }
