@@ -1,4 +1,4 @@
-import Server from "..Server/server.js";
+import Server from "../Server/server.js";
 
 const Network = {
     sendRequest(request, data) {
@@ -12,7 +12,7 @@ const Network = {
             }
             
             request.readyState = 3;
-            request._triggerOnLoad();
+            //request._triggerOnLoad();
             
             Server.handleRequest(request.method, request.url, data, (response) => {
                 request.status = response.status;

@@ -6,21 +6,31 @@
     <title>Contact List SPA</title>
     <link rel="stylesheet" href="SAP-contact_list.css" />
     <link rel="stylesheet" href="auth-forms.css" />
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
   </head>
   <body>
     <nav id="nav-bar" class="hidden">
-      <button onclick="logout()">Logout</button>  
+      <button onclick="logout()">Logout</button>
     </nav>
 
     <div class="container">
       <div id="create" class="template-section hidden">
         <h2>Add Contact</h2>
         <input type="text" id="contactName" placeholder="Enter contact name" />
-        <input type="text" id="contactPhone" placeholder="Enter contact phone" />
-        <input type="email" id="contactEmail" placeholder="Enter contact email" />
-        <button onclick="addContact()">Add</button>
-        <button onclick="showTemplate('read')">Cancel</button>
+        <input
+          type="text"
+          id="contactPhone"
+          placeholder="Enter contact phone"
+        />
+        <input
+          type="email"
+          id="contactEmail"
+          placeholder="Enter contact email"
+        />
+        <div class="actions">
+          <button onclick="addContact()">Add</button>
+          <button onclick="showTemplate('read')">Cancel</button>
+        </div>
       </div>
 
       <div id="read" class="template-section hidden">
@@ -44,28 +54,48 @@
       <div id="edit" class="template-section hidden">
         <h2>Edit Contact</h2>
         <input type="text" id="editContactName" placeholder="Enter new name" />
-        <input type="text" id="editContactPhone" placeholder="Enter new phone" />
-        <input type="email" id="editContactEmail" placeholder="Enter new email" />
-        <div class="edit-actions">
+        <input
+          type="text"
+          id="editContactPhone"
+          placeholder="Enter new phone"
+        />
+        <input
+          type="email"
+          id="editContactEmail"
+          placeholder="Enter new email"
+        />
+        <div class="actions">
           <button onclick="saveEditContact()">Save</button>
           <button onclick="showTemplate('read')">Cancel</button>
         </div>
       </div>
 
       <div id="signin" class="template-section">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Enter username" />
-        <input type="password" id="password" placeholder="Enter password" />
-        <button onclick="login()">Login</button>
-        <button onclick="showTemplate('signup')">Signup</button>
+        <div class="form-container">
+          <h2>Login</h2>
+          <input type="text" id="username" placeholder="Enter username" />
+          <input type="password" id="password" placeholder="Enter password" />
+          <div class="actions">
+            <button onclick="login()">Login</button>
+            <button onclick="showTemplate('signup')">Signup</button>
+          </div>
+        </div>
       </div>
 
       <div id="signup" class="template-section hidden">
-        <h2>Signup</h2>
-        <input type="text" id="signupUsername" placeholder="Enter username" />
-        <input type="password" id="signupPassword" placeholder="Enter password" />
-        <button onclick="signup()">Signup</button>
-        <button onclick="showTemplate('signin')">Cancel</button>
+        <div class="form-container">
+          <h2>Signup</h2>
+          <input type="text" id="signupUsername" placeholder="Enter username" />
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Enter password"
+          />
+          <div class="actions">
+            <button onclick="signup()">Signup</button>
+            <button onclick="showTemplate('signin')">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -82,7 +112,9 @@
           ></button>
           <button
             class="delete"
-            style="background-image: url(../Client/media/icons8-garbage-bin-64.png);"
+            style="
+              background-image: url(../Client/media/icons8-garbage-bin-64.png);
+            "
             onclick="deleteContact(event)"
           ></button>
         </div>

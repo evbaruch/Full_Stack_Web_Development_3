@@ -1,7 +1,7 @@
 /* General Styles */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f5f5dc; /* Cream color */
+  background: linear-gradient(to right, #f5f5dc, #e0e0e0); /* Gradient background */
   color: #333;
   margin: 0;
   padding: 0;
@@ -34,40 +34,63 @@ nav {
   padding-bottom: 10px;
 }
 
+nav button {
+  cursor: pointer;
+  text-transform: uppercase;
+  width: 100px;
+}
+
 /* Hidden Sections */
 .hidden {
   display: none;
 }
 
 /* Form Styles */
-input[type="text"], input[type="email"] {
+.form-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 14px;
-  background: none;
+  background: #f9f9f9;
   color: #333;
 }
 
-/* Button Styling */
 button {
-  width: 30%;
+  width: 50%;
   padding: 10px;
   background: #007BFF;
   color: white;
   border: none;
   border-radius: 5px;
-  margin: 5px;
+  margin: 10px 0;
   font-size: 14px;
   cursor: pointer;
   text-transform: uppercase;
   font-weight: bold;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 button:hover {
   background-color: #0056b3;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Contact Headers */
@@ -117,7 +140,7 @@ button:hover {
 }
 
 /* Contact Actions */
-.contact-actions {
+.actions {
   display: flex;
   justify-content: left;
   gap: 5px;
@@ -170,7 +193,7 @@ header {
 
 /* Existing styles for .add-contact button */
 .add-contact-button {
-  background-color: #007BFF; /* Set background color */
+  background-color: rgb(120, 134, 199); /* Set background color */
   background-image: url("../Client/media/icons8-plus-128.png");
   background-size: 50px;
   background-repeat: no-repeat;
