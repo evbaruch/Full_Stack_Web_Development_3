@@ -41,29 +41,43 @@ const UserDB = {
 const ContactDB = {
   handleRequest(method, url, data) {
     let contacts = JSON.parse(localStorage.getItem("contacts")) || {};
-
+    const parts = url.split("/");
     if (method === "GET") {
-      const parts = url.split("/");
       if (parts.length === 4 && parts[2] !== "all") {
         // Example: GET /contacts/user_id
         const userId = parts[2];
         if (userId !== data.currentUser) {
           return { status: 403, data: { message: "Access denied" } };
         }
-        return { status: 200, data: contacts[userId] || [] };
+        if (parts[3] === "all") {
+          return { status: 200, data: contacts[userId] || [] };
+        } else if (parts[3] === "search") {
+          let contact = contacts[userId].filter(
+            (c) =>
+              c.name.toLowerCase().includes(data.search.toLowerCase()) ||
+              c.phone.toLowerCase().includes(data.search.toLowerCase()) ||
+              c.email.toLowerCase().includes(data.search.toLowerCase())
+          );
+          return { status: 200, data: contact };
+        }
+        return { status: 404, data: { message: "User not found" } };
       }
     } else if (method === "POST") {
       // Example: POST /contacts { userId: "123", name: "Alice" }
-      if (!contacts[data.userID]) contacts[data.userID] = [];
+      if (!contacts[data.userID]) {
+        contacts[data.userID] = [];
+      }
+      data.contactId = Date.now().toString();
       contacts[data.userID].push(data);
       localStorage.setItem("contacts", JSON.stringify(contacts));
-      return { status: 201, data: data , contactId: Date.now().toString()};
-
+      return { status: 201, data: data };
     } else if (method === "PUT") {
       // Example: PUT /contacts { userId: "123", id: "456", name: "Bob" }
       if (!contacts[data.userID])
         return { status: 404, data: { message: "User not found" } };
-      const index = contacts[data.userID].findIndex((c) => c.contactId === data.contactId);
+      const index = contacts[data.userID].findIndex(
+        (c) => c.contactId === data.contactId
+      );
       if (index !== -1) {
         contacts[data.userID][index] = data;
         localStorage.setItem("contacts", JSON.stringify(contacts));
@@ -71,15 +85,17 @@ const ContactDB = {
       }
       return { status: 404, data: { message: "Contact not found" } };
     } else if (method === "DELETE") {
-
       // Example: DELETE /contacts { userId: "123", id: "456" }
       if (!contacts[data.userID])
         return { status: 404, data: { message: "User not found" } };
-      const initialLength = contacts[data.userID].length;
-      contacts[data.userID] = contacts[data.userID].filter(
-        (c) => c.contactId !== data.contactId
+      if (parts[2] !== data.userID)
+        return { status: 403, data: { message: "Access denied" } };
+
+      const index = contacts[data.userID].findIndex(
+        (c) => c.contactId === data.contactId
       );
-      if (contacts[data.userID].length !== initialLength) {
+      if (index !== -1) {
+        contacts[data.userID].splice(index, 1);
         localStorage.setItem("contacts", JSON.stringify(contacts));
         return { status: 200, data: { message: "Contact deleted" } };
       }

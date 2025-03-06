@@ -27,6 +27,8 @@ function loadContacts() {
       console.log(xhr.responseText);
       contacts = JSON.parse(xhr.responseText);
       renderList();
+    } else if (xhr.readyState === 4) {
+      alert(xhr.responseText);
     }
   };
   xhr.send({ currentUser: userID });
@@ -45,14 +47,15 @@ function addContact() {
       if (xhr.readyState === 4 && xhr.status === 201) {
         let contactID = JSON.parse(xhr.responseText).contactId;
         contacts.push({ name, phone, email, contactID });
+        renderList();
+      } else if (xhr.readyState === 4) {
+        alert(xhr.responseText);
       }
     };
     xhr.send({ name, phone, email, userID });
-
     document.getElementById("contactName").value = "";
     document.getElementById("contactPhone").value = "";
     document.getElementById("contactEmail").value = "";
-    renderList();
     showTemplate("read");
   }
 }
@@ -138,13 +141,16 @@ function saveEditContact() {
 
 function deleteContact(event) {
   const index = event.target.getAttribute("data-index");
-  contactId = contacts[index].contactID;
+  contactId = contacts[index].contactID || contacts[index].contactId;
   const xhr = new FXMLHttpRequest();
   xhr.open("DELETE", `http://localhost:3000/contacts/${userID}/${contactId}`);
   xhr.onload = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log("Contact deleted successfully");
       contacts.splice(index, 1);
+      renderList();
+    } else if (xhr.readyState === 4) {
+      alert(xhr.responseText);
     }
   };
   xhr.send({ userID: userID, contactId: contactId });
@@ -166,6 +172,8 @@ function signup() {
         alert("Signup successful");
         showTemplate("read");
         loadContacts();
+      } else if (xhr.readyState === 4) {
+        alert(xhr.responseText);
       }
     };
     xhr.send({ username, password });
@@ -188,6 +196,8 @@ function login() {
         alert("Login successful");
         showTemplate("read");
         loadContacts();
+      } else if (xhr.readyState === 4) {
+        alert(xhr.responseText);
       }
     };
     xhr.send({ username, password });
@@ -203,6 +213,24 @@ function logout() {
   showTemplate("signin");
 }
 
+// search function
+function searchContact() {
+  const search = document.getElementById("searchInput").value.trim();
+  const xhr = new FXMLHttpRequest();
+  xhr.open("GET", `http://localhost:3000/contacts/${userID}/search`);
+  xhr.onload = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log(xhr.responseText);
+      contacts = JSON.parse(xhr.responseText);
+      renderList();
+    } else if (xhr.readyState === 4) {
+      alert(xhr.responseText);
+    }
+  };
+  xhr.send({ currentUser: userID, search });
+  renderList();
+}
+
 // Attach functions to the window object to make them globally accessible
 window.showTemplate = showTemplate;
 window.addContact = addContact;
@@ -212,3 +240,4 @@ window.deleteContact = deleteContact;
 window.signup = signup;
 window.login = login;
 window.logout = logout;
+window.searchContact = searchContact;
