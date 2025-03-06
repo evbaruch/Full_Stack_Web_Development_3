@@ -100,10 +100,11 @@ function goToEditContact(event) {
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
   contacts.findIndex((c) => {
     if (
-      c.contactName === contacts[editIndex].name &&
-      c.contactPhone === contacts[editIndex].phone
+      c.name === contacts[editIndex].name &&
+      c.phone === contacts[editIndex].phone &&
+      c.email === contacts[editIndex].email
     ) {
-      contactId = c.contactID;
+      contactId = c.contactId;
     }
   });
 
@@ -125,7 +126,12 @@ function saveEditContact() {
     const xhr = new FXMLHttpRequest();
     xhr.open("PUT", `http://localhost:3000/contacts/${userID}/${contactId}`);
     xhr.onload = () => {
-      console.log("Contact updated successfully");
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log(xhr.responseText);
+        renderList();
+        showTemplate("read");
+        console.log("Contact updated successfully");
+      }
     };
     xhr.send({
       name: newName,
@@ -133,9 +139,6 @@ function saveEditContact() {
       email: newEmail,
       userID: userID,
     });
-
-    renderList();
-    showTemplate("read");
   }
 }
 
