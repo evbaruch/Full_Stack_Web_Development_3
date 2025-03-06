@@ -17,14 +17,15 @@ const Server = {
 // User Database
 const UserDB = {
     handleRequest(method, url, data) {
-        let users = JSON.parse(localStorage.getItem("users")) || [];
+        let users = JSON.parse(localStorage.getItem("users")) || {};
         
         if (method === "GET") {
-            return { status: 200, data: users };
+            return { status: 200, data: Object.values(users) };
         } else if (method === "POST") {
-            users.push(data);
+            const userId = Date.now().toString();
+            users[userId] = { id: userId, ...data };
             localStorage.setItem("users", JSON.stringify(users));
-            return { status: 201, data: data };
+            return { status: 201, data: users[userId] };
         }
         return { status: 400, data: { message: "Invalid User Request" } };
     }
@@ -33,32 +34,37 @@ const UserDB = {
 // Contact Database
 const ContactDB = {
     handleRequest(method, url, data) {
-        let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+        let contacts = JSON.parse(localStorage.getItem("contacts")) || {};
         
         if (method === "GET") {
             const parts = url.split("/");
-            if (parts.length === 3 && parts[2] === "all") {
-                return { status: 200, data: contacts };
-            } else if (parts.length === 3) {
-                const userContacts = contacts.filter(c => c.userId === parts[2]);
-                return { status: 200, data: userContacts };
+            if (parts.length === 4 && parts[2] !== "all") {
+                const userId = parts[2];
+                if (userId !== data.currentUser) {
+                    return { status: 403, data: { message: "Access denied" } };
+                }
+                return { status: 200, data: contacts[userId] || [] };
             }
         } else if (method === "POST") {
-            contacts.push(data);
+            if (!contacts[data.userId]) contacts[data.userId] = [];
+            contacts[data.userId].push(data);
             localStorage.setItem("contacts", JSON.stringify(contacts));
             return { status: 201, data: data };
         } else if (method === "PUT") {
-            const index = contacts.findIndex(c => c.id === data.id);
+            if (!contacts[data.userId]) return { status: 404, data: { message: "User not found" } };
+            const index = contacts[data.userId].findIndex(c => c.id === data.id);
             if (index !== -1) {
-                contacts[index] = data;
+                contacts[data.userId][index] = data;
                 localStorage.setItem("contacts", JSON.stringify(contacts));
                 return { status: 200, data: data };
             }
             return { status: 404, data: { message: "Contact not found" } };
         } else if (method === "DELETE") {
-            const filteredContacts = contacts.filter(c => c.id !== data.id);
-            if (filteredContacts.length !== contacts.length) {
-                localStorage.setItem("contacts", JSON.stringify(filteredContacts));
+            if (!contacts[data.userId]) return { status: 404, data: { message: "User not found" } };
+            const initialLength = contacts[data.userId].length;
+            contacts[data.userId] = contacts[data.userId].filter(c => c.id !== data.id);
+            if (contacts[data.userId].length !== initialLength) {
+                localStorage.setItem("contacts", JSON.stringify(contacts));
                 return { status: 200, data: { message: "Contact deleted" } };
             }
             return { status: 404, data: { message: "Contact not found" } };
