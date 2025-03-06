@@ -28,7 +28,7 @@ function loadContacts() {
       renderList();
     }
   };
-  xhr.send();
+  xhr.send({ currentUser: userID });
   renderList();
 }
 
@@ -47,7 +47,7 @@ function addContact() {
         console.log(xhr.responseText);
       }
     };
-    xhr.send({ name, phone, email });
+    xhr.send({ name, phone, email, userID });
 
     document.getElementById("contactName").value = "";
     document.getElementById("contactPhone").value = "";
@@ -142,7 +142,7 @@ function signup() {
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 201) {
         console.log(xhr.responseText);
-        userID = JSON.parse(xhr.responseText)[0];
+        userID = JSON.parse(xhr.responseText).id;
         console.log(userID);
         alert("Signup successful");
         showTemplate("read");

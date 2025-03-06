@@ -54,30 +54,30 @@ const ContactDB = {
       }
     } else if (method === "POST") {
       // Example: POST /contacts { userId: "123", name: "Alice" }
-      if (!contacts[data.userId]) contacts[data.userId] = [];
-      contacts[data.userId].push(data);
+      if (!contacts[data.userID]) contacts[data.userID] = [];
+      contacts[data.userID].push(data);
       localStorage.setItem("contacts", JSON.stringify(contacts));
       return { status: 201, data: data };
     } else if (method === "PUT") {
       // Example: PUT /contacts { userId: "123", id: "456", name: "Bob" }
-      if (!contacts[data.userId])
+      if (!contacts[data.userID])
         return { status: 404, data: { message: "User not found" } };
-      const index = contacts[data.userId].findIndex((c) => c.id === data.id);
+      const index = contacts[data.userID].findIndex((c) => c.name === data.name && c.phone === data.phone && c.email === data.email);
       if (index !== -1) {
-        contacts[data.userId][index] = data;
+        contacts[data.userID][index] = data;
         localStorage.setItem("contacts", JSON.stringify(contacts));
         return { status: 200, data: data };
       }
       return { status: 404, data: { message: "Contact not found" } };
     } else if (method === "DELETE") {
       // Example: DELETE /contacts { userId: "123", id: "456" }
-      if (!contacts[data.userId])
+      if (!contacts[data.userID])
         return { status: 404, data: { message: "User not found" } };
-      const initialLength = contacts[data.userId].length;
-      contacts[data.userId] = contacts[data.userId].filter(
+      const initialLength = contacts[data.userID].length;
+      contacts[data.userID] = contacts[data.userID].filter(
         (c) => c.id !== data.id
       );
-      if (contacts[data.userId].length !== initialLength) {
+      if (contacts[data.userID].length !== initialLength) {
         localStorage.setItem("contacts", JSON.stringify(contacts));
         return { status: 200, data: { message: "Contact deleted" } };
       }
