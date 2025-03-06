@@ -4,8 +4,6 @@ let contacts = [];
 let userID = null;
 let editIndex = null;
 
-document.addEventListener("DOMContentLoaded", loadContacts);
-
 function showTemplate(templateId) {
   document
     .querySelectorAll(".template-section")
@@ -20,17 +18,16 @@ function showTemplate(templateId) {
   }
 }
 
-function loadContacts() {
-  const xhr = new FXMLHttpRequest();
-  xhr.open("GET", "http://localhost:3000/contacts/all");
-  xhr.onload = () => {
-    alert(xhr.responseText);
-  };
-  xhr.send().data.forEach((contact) => {
-    contacts.push(contact);
-  });
-  renderList();
-}
+// function loadContacts() {
+//   const xhr = new FXMLHttpRequest();
+//   xhr.open("GET", "http://localhost:3000/contacts/all");
+//   xhr.onload = (response) => {
+//     contacts = response.data;
+//     renderList();
+//   };
+//   xhr.send()
+//   renderList();
+// }
 
 function addContact() {
   const name = document.getElementById("contactName").value.trim();
@@ -41,8 +38,8 @@ function addContact() {
 
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
-    xhr.onload = () => {
-      console.log(xhr.responseText);
+    xhr.onload = (response) => {
+      console.log(response);
     };
     xhr.send({ name, phone, email });
 
@@ -121,7 +118,9 @@ function deleteContact(event) {
   const xhr = new FXMLHttpRequest();
   xhr.open("DELETE", `http://localhost:3000/contacts/${index}`);
   xhr.onload = () => {
-    console.log("Contact deleted successfully");
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log("Contact deleted successfully");
+    }
   };
   xhr.send();
 
@@ -133,16 +132,11 @@ function signup() {
   const password = document.getElementById("signupPassword").value.trim();
   if (username && password) {
     const xhr = new FXMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/signup");
-    xhr.onload = () => {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      if (users.find((user) => user.username === username)) {
-        alert("Username already exists");
-      } else {
-        users.push({ username, password });
-        localStorage.setItem("users", JSON.stringify(users));
+    xhr.open("POST", "http://localhost:3000/users/signup");
+    xhr.onload = (response) => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        userID = response.data.id;
         alert("Signup successful");
-        showTemplate("signin");
       }
     };
     xhr.send({ username, password });
@@ -157,11 +151,14 @@ function login() {
   if (username && password) {
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/users");
-    xhr.onload = () => {
-      //if the post fails, the user is not in the database
-      alert(xhr.responseText);
+    xhr.onload = (response) => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        userID = response.data.id
+        alert("Login successful");
+      }
     };
-    userID = xhr.send({ username, password }).data.id;
+    xhr.send({ username, password });
+    // loadContacts();
     showTemplate("read");
   } else {
     alert("Please enter a username and password");
