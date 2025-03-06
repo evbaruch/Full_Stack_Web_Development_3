@@ -3,7 +3,7 @@ const Server = {
     console.log(`Server received request: ${method} ${url}`, data);
 
     let response = { status: 400, data: { message: "Invalid Request" } };
-    url = url.replace("http://localhost:3000/" , "");
+    url = url.replace("http://localhost:3000", "");
     if (url.startsWith("/users")) {
       // Example: GET /users, POST /users
       response = UserDB.handleRequest(method, url, data);
@@ -20,7 +20,6 @@ const Server = {
 const UserDB = {
   handleRequest(method, url, data) {
     let users = JSON.parse(localStorage.getItem("users")) || {};
-    url = url.replace("http://localhost:3000/", "");
     if (method === "GET") {
       // Example: GET /users
       return { status: 200, data: Object.values(users) };

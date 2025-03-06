@@ -135,7 +135,8 @@ function signup() {
     xhr.open("POST", "http://localhost:3000/users/signup");
     xhr.onload = () => {
 
-      if (xhr.readyState === 4 && xhr.status === 200) {
+      if (xhr.readyState === 4 && xhr.status === 201) {
+        console.log(xhr.responseText);
         userID = JSON.parse(xhr.responseText).data.id;
         console.log(userID);
         alert("Signup successful");
@@ -154,9 +155,10 @@ function login() {
   const password = document.getElementById("password").value.trim();
   if (username && password) {
     const xhr = new FXMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/users");
+    xhr.open("GET", "http://localhost:3000/users");
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log(xhr.responseText);
         userID = JSON.parse(xhr.responseText).data.id;
         console.log(userID);
         alert("Login successful");
