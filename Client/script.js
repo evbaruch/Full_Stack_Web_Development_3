@@ -18,16 +18,19 @@ function showTemplate(templateId) {
   }
 }
 
-// function loadContacts() {
-//   const xhr = new FXMLHttpRequest();
-//   xhr.open("GET", "http://localhost:3000/contacts/all");
-//   xhr.onload = (response) => {
-//     contacts = response.data;
-//     renderList();
-//   };
-//   xhr.send()
-//   renderList();
-// }
+function loadContacts() {
+  const xhr = new FXMLHttpRequest();
+  xhr.open("GET", `http://localhost:3000/contacts/${userID}/all`);
+  xhr.onload = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log(xhr.responseText);
+      contacts = JSON.parse(xhr.responseText);
+      renderList();
+    }
+  };
+  xhr.send();
+  renderList();
+}
 
 function addContact() {
   const name = document.getElementById("contactName").value.trim();
@@ -37,9 +40,12 @@ function addContact() {
     contacts.push({ name, phone, email });
 
     const xhr = new FXMLHttpRequest();
+    console.log(userID);
     xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
     xhr.onload = () => {
-      console.log();
+      if (xhr.readyState === 4 && xhr.status === 201) {
+        console.log(xhr.responseText);
+      }
     };
     xhr.send({ name, phone, email });
 
@@ -134,17 +140,16 @@ function signup() {
     const xhr = new FXMLHttpRequest();
     xhr.open("POST", "http://localhost:3000/users/signup");
     xhr.onload = () => {
-
       if (xhr.readyState === 4 && xhr.status === 201) {
         console.log(xhr.responseText);
-        userID = JSON.parse(xhr.responseText).id;
+        userID = JSON.parse(xhr.responseText)[0];
         console.log(userID);
         alert("Signup successful");
+        showTemplate("read");
+        loadContacts();
       }
     };
     xhr.send({ username, password });
-    // loadContacts();
-    showTemplate("read");
   } else {
     alert("Please enter a username and password");
   }
@@ -159,14 +164,14 @@ function login() {
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         console.log(xhr.responseText);
-        userID = JSON.parse(xhr.responseText).id;
+        userID = JSON.parse(xhr.responseText)[0];
         console.log(userID);
         alert("Login successful");
+        showTemplate("read");
+        loadContacts();
       }
     };
     xhr.send({ username, password });
-    // loadContacts();
-    showTemplate("read");
   } else {
     alert("Please enter a username and password");
   }

@@ -22,7 +22,10 @@ const UserDB = {
     let users = JSON.parse(localStorage.getItem("users")) || {};
     if (method === "GET") {
       // Example: GET /users
-      return { status: 200, data: Object.values(users) };
+      let user = Object.values(users).find(
+        (u) => u.username === data.username && u.password === data.password
+      );
+      return { status: 200, data: Object.values(user) };
     } else if (method === "POST") {
       // Example: POST /users { name: "John Doe" }
       const userId = Date.now().toString();
