@@ -1,6 +1,6 @@
 import Server from "../Server/server.js";
 
-const DROP_PROBABILITY = 0.2;
+const DROP_PROBABILITY = 0; // 0.2; // 20% chance of dropping the request or response
 const Network = {
   sendRequest(request, data) {
     const delayToServer = Math.random() * 500 + 1000; // at least 1 second up to 1.5 seconds
@@ -27,7 +27,7 @@ const Network = {
         const delayToClient = Math.random() * 500 + 1000; // at least 1 second up to 1.5 seconds
         setTimeout(() => {
           if (dropProbabilityToClient < DROP_PROBABILITY) {
-            // 20% chance of dropping the response
+            // // 20% chance of dropping the response
             console.warn("FAJAX: Response lost in the network simulation.");
             request.readyState = 4;
             request.status = 504;

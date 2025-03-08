@@ -211,6 +211,12 @@ header {
 }
 
 
+.retryButton {
+  /* make the butten unclickable */
+  pointer-events: none;
+}
+
+
 .search-bar {
   display: flex;
   justify-content: center;

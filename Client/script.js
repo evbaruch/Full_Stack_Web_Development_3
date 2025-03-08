@@ -46,7 +46,7 @@ function addContact() {
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 201) {
         let contactId = JSON.parse(xhr.responseText).contactId;
-        contacts.push({ name, phone, email, contactId: contactId });
+        contacts.push({ name, phone, email, contactId });
         renderList();
       } else if (xhr.readyState === 4) {
         alert(xhr.responseText);
@@ -87,7 +87,9 @@ function renderList() {
       contactPhone.textContent = contact.phone;
       contactEmail.textContent = contact.email;
       editButton.setAttribute("data-index", index);
+      editButton.setAttribute("data-contact-id", contact.contactId);
       deleteButton.setAttribute("data-index", index);
+      deleteButton.setAttribute("data-contact-id", contact.contactId);
       list.appendChild(clone);
     }
   });
@@ -95,19 +97,10 @@ function renderList() {
 
 function goToEditContact(event) {
   editIndex = event.target.getAttribute("data-index");
+  contactId = event.target.getAttribute("data-contact-id");
   document.getElementById("editContactName").value = contacts[editIndex].name;
   document.getElementById("editContactPhone").value = contacts[editIndex].phone;
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
-  contacts.findIndex((c) => {
-    if (
-      c.name === contacts[editIndex].name &&
-      c.phone === contacts[editIndex].phone &&
-      c.email === contacts[editIndex].email
-    ) {
-      contactId = c.contactId;
-    }
-  });
-
   showTemplate("edit");
 }
 
@@ -125,11 +118,11 @@ function saveEditContact() {
           name: newName,
           phone: newPhone,
           email: newEmail,
-          contactID: contactId,
+          contactId: contactId,
         };
         renderList();
-      }
-      else if (xhr.readyState === 4) {
+        showTemplate("read");
+      } else if (xhr.readyState === 4) {
         alert(xhr.responseText);
       }
     };
@@ -138,13 +131,14 @@ function saveEditContact() {
       phone: newPhone,
       email: newEmail,
       userID: userID,
+      contactId: contactId,
     });
   }
 }
 
 function deleteContact(event) {
   const index = event.target.getAttribute("data-index");
-  contactId = contacts[index].contactID || contacts[index].contactId;
+  contactId = event.target.getAttribute("data-contact-id");
   const xhr = new FXMLHttpRequest();
   xhr.open("DELETE", `http://localhost:3000/contacts/${userID}/${contactId}`);
   xhr.onload = () => {
@@ -234,7 +228,66 @@ function searchContact() {
   renderList();
 }
 
-// Attach functions to the window object to make them globally accessible
+function handleNetworkRequest(method, url, data, callback) {
+  const button = document.getElementById("retryButton");
+  button.classList.add("hidden");
+
+  // Store all parameters in data attributes to be used in the retry function
+  button.setAttribute("data-method", method);
+  button.setAttribute("data-url", url);
+  button.setAttribute("data-data", JSON.stringify(data));
+  button.setAttribute("data-callback", callback.name);
+
+  button.style.pointerEvents = "none";
+
+  const xhr = new FXMLHttpRequest();
+  xhr.open(method, url);
+  xhr.onload = () => {
+    callback(xhr);
+  };
+  xhr.send(data);
+  setTimeout(() => {
+    if (xhr.readyState !== 4) {
+      button.classList.remove("hidden");
+      button.style.pointerEvents = "auto";
+    }
+  }, 4000);
+}
+
+function handleRetryClick() {
+  // TODO: add a animation of loading
+  const button = document.getElementById("retryButton");
+
+  // Retrieve stored parameters from data attributes
+  const method = button.getAttribute("data-method");
+  const url = button.getAttribute("data-url");
+  const data = JSON.parse(button.getAttribute("data-data"));
+  const callbackName = button.getAttribute("data-callback");
+
+  // Find the callback function by name
+  const callback = window[callbackName];
+
+  // Retry the network request
+  handleNetworkRequest(method, url, data, callback);
+}
+
+// When using a module system in JavaScript, such as ES6 modules,
+// the functions and variables defined within a module are not automatically added to the global scope.
+//  This means that they are not accessible from the HTML file directly. To understand why this happens and how to resolve it,
+//  let's delve into the details.
+
+// What is a Module System?
+// A module system allows you to break your code into smaller,
+//  reusable pieces called modules. Each module can export functions, objects, or variables,
+//  and other modules can import and use them. This helps in organizing code, improving maintainability,
+//  and avoiding global namespace pollution.
+
+// How Modules Work
+// In a module system, each module has its own scope.
+//  This means that the functions and variables defined within a module are not accessible outside of that
+//  module unless they are explicitly exported. Similarly, to use functions or variables from another module,
+//  you need to import them.
+
 window.showTemplate = showTemplate;
 window.addContact = addContact;
 window.goToEditContact = goToEditContact;
@@ -244,3 +297,5 @@ window.signup = signup;
 window.login = login;
 window.logout = logout;
 window.searchContact = searchContact;
+window.handleNetworkRequest = handleNetworkRequest;
+window.handleRetryClick = handleRetryClick;
