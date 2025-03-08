@@ -45,8 +45,8 @@ function addContact() {
     xhr.open("POST", `http://localhost:3000/contacts/${userID}`);
     xhr.onload = () => {
       if (xhr.readyState === 4 && xhr.status === 201) {
-        let contactID = JSON.parse(xhr.responseText).contactId;
-        contacts.push({ name, phone, email, contactID });
+        let contactId = JSON.parse(xhr.responseText).contactId;
+        contacts.push({ name, phone, email, contactId: contactId });
         renderList();
       } else if (xhr.readyState === 4) {
         alert(xhr.responseText);
