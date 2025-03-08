@@ -9,6 +9,12 @@ const Network = {
       if (dropProbability < 0.2) {
         // 20% chance of dropping the request
         console.warn("FAJAX: Request lost in the network simulation.");
+        request.readyState = 4;
+        request.status = 504;
+        request.responseText = JSON.stringify({
+          message: "Request lost in the network simulation.",
+        });
+        request._triggerOnLoad();
         return;
       }
 
@@ -18,7 +24,6 @@ const Network = {
       Server.handleRequest(request.method, request.url, data, (response) => {
         request.status = response.status;
         request.responseText = JSON.stringify(response.data);
-
         request.readyState = 4;
         request._triggerOnLoad();
       });

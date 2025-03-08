@@ -115,17 +115,22 @@ function saveEditContact() {
   const newPhone = document.getElementById("editContactPhone").value.trim();
   const newEmail = document.getElementById("editContactEmail").value.trim();
   if (newName && newPhone && newEmail) {
-    contacts[editIndex] = {
-      name: newName,
-      phone: newPhone,
-      email: newEmail,
-      contactID: contactId,
-    };
-
     const xhr = new FXMLHttpRequest();
     xhr.open("PUT", `http://localhost:3000/contacts/${userID}/${contactId}`);
     xhr.onload = () => {
-      console.log("Contact updated successfully");
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log("Contact updated successfully");
+        contacts[editIndex] = {
+          name: newName,
+          phone: newPhone,
+          email: newEmail,
+          contactID: contactId,
+        };
+        renderList();
+      }
+      else if (xhr.readyState === 4) {
+        alert(xhr.responseText);
+      }
     };
     xhr.send({
       name: newName,
