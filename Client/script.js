@@ -100,10 +100,11 @@ function goToEditContact(event) {
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
   contacts.findIndex((c) => {
     if (
-      c.contactName === contacts[editIndex].name &&
-      c.contactPhone === contacts[editIndex].phone
+      c.name === contacts[editIndex].name &&
+      c.phone === contacts[editIndex].phone &&
+      c.email === contacts[editIndex].email
     ) {
-      contactId = c.contactID;
+      contactId = c.contactId;
     }
   });
 
@@ -138,9 +139,6 @@ function saveEditContact() {
       email: newEmail,
       userID: userID,
     });
-
-    renderList();
-    showTemplate("read");
   }
 }
 

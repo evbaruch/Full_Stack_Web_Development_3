@@ -3,7 +3,7 @@ const Server = {
     console.log(`Server received request: ${method} ${url}`, data);
 
     let response = { status: 400, data: { message: "Invalid Request" } };
-    url = url.replace("http://localhost:3000", "");
+    url = url.replace(/^https?:\/\/localhost:\d+/, "");
     if (url.startsWith("/users")) {
       // Example: GET /users, POST /users
       response = UserDB.handleRequest(method, url, data);
@@ -76,7 +76,7 @@ const ContactDB = {
       if (!contacts[data.userID])
         return { status: 404, data: { message: "User not found" } };
       const index = contacts[data.userID].findIndex(
-        (c) => c.contactId === data.contactId
+        (c) => c.contactId === parts[3]
       );
       if (index !== -1) {
         contacts[data.userID][index] = data;
