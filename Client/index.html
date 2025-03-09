@@ -88,8 +88,12 @@
           placeholder="Enter new email"
         />
         <div class="actions">
-          <button onclick="saveEditContact()">Save</button>
-          <button onclick="showTemplate('read')">Cancel</button>
+          <button class="actions-butten" onclick="saveEditContact()">
+            Save
+          </button>
+          <button class="actions-butten" onclick="showTemplate('read')">
+            Cancel
+          </button>
         </div>
       </div>
 
@@ -124,19 +128,26 @@
 
     <template id="contactTemplate">
       <div class="contact-item">
-        <span class="contact-phone"></span>
-        <span class="contact-name"></span>
-        <span class="contact-email"></span>
+        <img
+          class="contact-avatar"
+          src="../Client/media/user-icon.png"
+          alt="user"
+        />
+        <div class="contact-info">
+          <span class="contact-phone"></span>
+          <span class="contact-name"></span>
+          <span class="contact-email"></span>
+        </div>
         <div class="contact-actions">
           <button
             class="edit"
-            style="background-image: url(../Client/media/icons8-edit-48.png)"
+            style="background-image: url(../Client/media/white\ edit.png)"
             onclick="goToEditContact(event)"
           ></button>
           <button
             class="delete"
             style="
-              background-image: url(../Client/media/icons8-garbage-bin-64.png);
+              background-image: url(../Client/media/white\ garbage\ bin.png);
             "
             onclick="deleteContact(event)"
           ></button>
