@@ -113,7 +113,9 @@ button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   width: 100%;
-  background: #D5C7A3 !important; /* the !important is used to override the default background */
+  /* linear gradient background to the buttom */
+
+  background: #D5C7A3 !important; /* Gradient background */
   max-height: 50%; /* Scrollable list */
   height: 436px;
   overflow-y: auto;
