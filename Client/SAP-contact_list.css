@@ -223,8 +223,8 @@ header {
 
 /* Existing styles for .add-contact button */
 .add-contact-button {
-  background-color: rgb(120, 134, 199); /* Set background color */
-  background-image: url("../Client/media/icons8-plus-128.png");
+  background-color: navy; /* Set background color */
+  background-image: url("../Client/media/icons8-plus-128.png\ white.png");
   background-size: 50px;
   background-repeat: no-repeat;
   background-position: center;
