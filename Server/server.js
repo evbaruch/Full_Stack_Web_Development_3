@@ -52,11 +52,12 @@ const ContactDB = {
           if (parts[3] === "all") {
             return { status: 200, data: contacts[userId] || [] };
           } else if (parts[3] === "search") {
+            const searchRegex = new RegExp(data.search, "i"); // Create a case-insensitive regex
             let contact = contacts[userId].filter(
               (c) =>
-                c.name.toLowerCase().includes(data.search.toLowerCase()) ||
-                c.phone.toLowerCase().includes(data.search.toLowerCase()) ||
-                c.email.toLowerCase().includes(data.search.toLowerCase())
+                searchRegex.test(c.name) ||
+                searchRegex.test(c.phone) ||
+                searchRegex.test(c.email)
             );
             return { status: 200, data: contact };
           }
@@ -66,6 +67,19 @@ const ContactDB = {
       case "POST":
         if (!contacts[data.userID]) {
           contacts[data.userID] = [];
+        }
+        // Check for uniqueness based on email or phone number
+        const existingContact = contacts[data.userID].find(
+          (c) => c.email === data.email && c.phone === data.phone
+        );
+        if (existingContact) {
+          return {
+            status: 409,
+            data: {
+              message:
+                "Contact already exists , a unique email or phone number is required",
+            },
+          };
         }
         data.contactId = Date.now().toString();
         contacts[data.userID].push(data);
@@ -80,6 +94,22 @@ const ContactDB = {
           (c) => c.contactId === parts[3]
         );
         if (index !== -1) {
+          // Check for uniqueness based on email or phone number
+          const existingContact = contacts[data.userID].find(
+            (c) =>
+              c.email === data.email &&
+              c.phone === data.phone &&
+              c.contactId !== parts[3]
+          );
+          if (existingContact) {
+            return {
+              status: 409,
+              data: {
+                message:
+                  "Contact already exists , a unique email or phone number is required",
+              },
+            };
+          }
           contacts[data.userID][index] = data;
           localStorage.setItem("contacts", JSON.stringify(contacts));
           return { status: 200, data: data };

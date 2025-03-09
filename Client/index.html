@@ -14,7 +14,10 @@
     </nav>
 
     <div class="container">
-      <button id="retryButton" class="hidden retryButton" onclick="handleRetryClick()">Retry</button>
+      <div class = "retry-container">
+        <button id="retryButton" class="hidden retryButton" onclick="handleRetryClick()">Retry</button>
+        <img id="loader" class="hidden loader" src="../Client/media/icons8-loader-50.png" alt="retry" />
+      </div>
       <div id="create" class="template-section hidden">
         <h2>Add Contact</h2>
         <input type="text" id="contactName" placeholder="Enter contact name" />
