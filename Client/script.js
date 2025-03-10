@@ -70,7 +70,12 @@ function addContact() {
         document.getElementById("contactPhone").value = "";
         document.getElementById("contactEmail").value = "";
         showTemplate("read");
-      } else if (xhr.readyState === 4) {
+      }
+      // else if (xhr.readyState === 4 && xhr.status === 409) {
+      //   loadContacts();
+      //   showTemplate("read");
+      // } 
+      else if (xhr.readyState === 4) {
         alert(
           `Failed to add contact: \nerror code ${xhr.status} 
           \n${JSON.parse(xhr.responseText).message}`
@@ -151,7 +156,12 @@ function saveEditContact() {
           contactId: contactId,
         };
         showTemplate("read");
-      } else if (xhr.readyState === 4) {
+      } 
+      else if (xhr.readyState === 4 && xhr.status === 409) {
+        loadContacts();
+        showTemplate("read");
+      }
+      else if (xhr.readyState === 4) {
         alert(
           `Failed to save contact: \nerror code ${xhr.status} 
           \n${JSON.parse(xhr.responseText).message}`
@@ -185,7 +195,11 @@ function deleteContact(event) {
       console.log("Contact deleted successfully");
       contacts.splice(index, 1);
       renderList();
-    } else if (xhr.readyState === 4) {
+    }
+    else if (xhr.readyState === 4 && xhr.status === 404) {
+      loadContacts();
+    }
+     else if (xhr.readyState === 4) {
       alert(
         `Failed to delete contact: \nerror code ${xhr.status} \n${
           JSON.parse(xhr.responseText).message
