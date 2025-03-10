@@ -1,4 +1,4 @@
-/* General Styles */
+General Styles
 body {
   font-family: 'Arial', sans-serif;
   background: linear-gradient(to right, #f5f5dc, #e0e0e0); /* Gradient background */
@@ -97,7 +97,7 @@ button:hover {
 .contact-headers {
   display: grid;
   width: 100%; /* Full width */
-  grid-template-columns: 3fr 1fr 3fr auto; /* 3 columns and auto for actions */
+  grid-template-columns: 1fr 1fr 1fr auto; /* 3 columns and auto for actions */
   padding: 10px;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
@@ -124,20 +124,32 @@ button:hover {
 }
 
 .contact-item {
-  display: flex;
-  justify-content: space-between; /* Space between items */
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr auto; /* 3 columns and auto for actions */
   align-items: center;
+  justify-self: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   font-size: 14px;
-  width: 100%; /* Full width */
+  width: 100%; 
 }
 
 .contact-info {
-  display: grid;
-  grid-template-columns: 3fr 1fr 3fr auto; /* 1 column for the image and 3 columns for the text */
-  align-items: center;
-  gap: 10px;
+  display: contents; /* Use contents to make the spans part of the grid */
+}
+
+.contact-item img {
+  grid-column: 1 / 2 ; /* Place image in the first column */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 5px;
+  grid-column: 5 / 6; /* Place actions in the last column */
 }
 
 .contact-item span {
@@ -145,6 +157,7 @@ button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 10px;
+  margin: 5px;
   background: #dbd0b5;
   color: #333;
   font-weight: bold;
@@ -152,13 +165,6 @@ button:hover {
   width: auto;
   white-space: nowrap;
   text-align: center;
-}
-
-.contact-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
 }
 
 /* Contact Actions */
@@ -175,10 +181,6 @@ button:hover {
   font-weight: bold;
 }
 
-.contact-actions {
-  display: flex;
-  gap: 5px;
-}
 
 .contact-actions button {
   width: 30px;
@@ -253,23 +255,122 @@ header {
   margin-top: 20px;
 }
 
-/* loader animation */
-.loader {
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .search-bar {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
+
+.loader {
+  width: 40px;
+  height: 40px;
+  --c:no-repeat linear-gradient(orange 0 0);
+  background: var(--c),var(--c),var(--c),var(--c);
+  background-size: 21px 21px;
+  animation: l5 1.5s infinite cubic-bezier(0.3,1,0,1);
+}
+@keyframes l5 {
+ 0%   {background-position: 0 0,100% 0,100% 100%,0 100%}
+ 33%  {background-position: 0 0,100% 0,100% 100%,0 100% ;width:60px;height: 60px}
+ 66%  {background-position: 100% 0,100% 100%,0 100%,0 0 ;width:60px;height: 60px}
+ 100% {background-position: 100% 0,100% 100%,0 100%,0 0}
+}
+
+/* option 2 */
+/*  
+.loader {
+  width: fit-content;
+  font-size: 40px;
+  font-family: system-ui,sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #0000;
+  -webkit-text-stroke: 1px #000;
+  background: 
+    linear-gradient(90deg,#0000 33%,#000 0 67%,#0000 0) 
+    0/300% 100% no-repeat text;
+  animation: l2 2s linear infinite;
+}
+.loader:before {
+  content: "Loading";
+}
+@keyframes l2 {
+  0%{background-position: 100%}
+}
+*/
+
+/* option 3 */
+/*
+.loader {
+  width: 40px;
+  height: 20px;
+  --c:no-repeat radial-gradient(farthest-side,#000 93%,#0000);
+  background:
+    var(--c) 0    0,
+    var(--c) 50%  0;
+  background-size: 8px 8px;
+  position: relative;
+  clip-path: inset(-200% -100% 0 0);
+  animation: l6-0 1.5s linear infinite;
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  background: #000;
+  left: -16px;
+  top: 0;
+  animation: 
+    l6-1 1.5s linear infinite,
+    l6-2 0.5s cubic-bezier(0,200,.8,200) infinite;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000; 
+  animation: l6-3 1.5s linear infinite;
+}
+@keyframes l6-0 {
+  0%,30%  {background-position: 0  0   ,50% 0   }
+  33%     {background-position: 0  100%,50% 0   }
+  41%,63% {background-position: 0  0   ,50% 0   }
+  66%     {background-position: 0  0   ,50% 100%}
+  74%,100%{background-position: 0  0   ,50% 0   }
+}
+@keyframes l6-1 {
+  90%  {transform:translateY(0)}
+  95%  {transform:translateY(15px)}
+  100% {transform:translateY(15px);left:calc(100% - 8px)}
+}
+@keyframes l6-2 {
+  100% {top:-0.1px}
+}
+@keyframes l6-3 {
+  0%,80%,100% {transform:translate(0)}
+  90%         {transform:translate(26px)}
+}
+*/
+
+
+/* option 4 */
+/*
+.loader {
+  width: fit-content;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 30px;
+  padding-bottom: 8px;
+  background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
+  animation: l2 2s linear infinite;
+}
+.loader:before {
+  content:"Loading..."
+}
+@keyframes l2 {to{background-size: 100% 3px}}
+*/
