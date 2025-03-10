@@ -5,20 +5,31 @@ let userID = null;
 let editIndex = null;
 let contactId = null;
 
+// showing the login template by default
+document.addEventListener("DOMContentLoaded", () => {
+  showTemplate("signin");
+});
+
 // Global object to store callback functions
 const callbackRegistry = {};
 
 function showTemplate(templateId) {
-  document
-    .querySelectorAll(".template-section")
-    .forEach((section) => section.classList.add("hidden"));
-  document.getElementById(templateId).classList.remove("hidden");
+  const content = document.getElementById("content");
+  content.innerHTML = "";
+  const template = document.getElementById(`${templateId}-template`).content;
+  const clone = document.importNode(template, true);
+  content.appendChild(clone);
 
   // Hide nav bar when in signin or signup mode
   if (templateId === "signin" || templateId === "signup") {
     document.getElementById("nav-bar").style.display = "none";
   } else {
     document.getElementById("nav-bar").style.display = "flex";
+  }
+
+  // Call renderList if the read template is shown
+  if (templateId === "read") {
+    renderList();
   }
 }
 
@@ -58,7 +69,6 @@ function addContact() {
         document.getElementById("contactName").value = "";
         document.getElementById("contactPhone").value = "";
         document.getElementById("contactEmail").value = "";
-        renderList();
         showTemplate("read");
       } else if (xhr.readyState === 4) {
         alert(
@@ -80,8 +90,12 @@ function addContact() {
 
 function renderList() {
   const list = document.getElementById("contactList");
+  if (!list) {
+    console.error("contactList element not found");
+    return;
+  }
   list.innerHTML = "";
-  const template = document.getElementById("contactTemplate").content;
+  const template = document.getElementById("contact-template").content;
   contacts.forEach((contact, index) => {
     const clone = document.importNode(template, true);
     const contactName = clone.querySelector(".contact-name");
@@ -116,10 +130,10 @@ function renderList() {
 function goToEditContact(event) {
   editIndex = event.target.getAttribute("data-index");
   contactId = event.target.getAttribute("data-contact-id");
+  showTemplate("edit");
   document.getElementById("editContactName").value = contacts[editIndex].name;
   document.getElementById("editContactPhone").value = contacts[editIndex].phone;
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
-  showTemplate("edit");
 }
 
 function saveEditContact() {
@@ -136,7 +150,6 @@ function saveEditContact() {
           email: newEmail,
           contactId: contactId,
         };
-        renderList();
         showTemplate("read");
       } else if (xhr.readyState === 4) {
         alert(
@@ -360,3 +373,5 @@ window.logout = logout;
 window.searchContact = searchContact;
 window.handleNetworkRequest = handleNetworkRequest;
 window.handleRetryClick = handleRetryClick;
+window.loadContacts = loadContacts;
+window.renderList = renderList;
