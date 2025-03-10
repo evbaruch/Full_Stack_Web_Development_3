@@ -146,12 +146,18 @@ button:hover {
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .contact-actions {
   display: flex;
   gap: 5px;
   grid-column: 5 / 6; /* Place actions in the last column */
+}
+
+.contact-actions * {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .contact-item span {
