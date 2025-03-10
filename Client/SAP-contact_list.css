@@ -121,6 +121,8 @@ button:hover {
   background: none;
   /* removing the default scrollbar */
   scrollbar-width: none;
+  /* disable scrolling on the x-axis */
+  overflow-x: hidden;
 }
 
 .contact-item {
