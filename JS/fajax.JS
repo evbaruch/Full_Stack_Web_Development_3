@@ -1,4 +1,4 @@
-import Network from "../JS/Network.js";
+import Network from "./network.js";
 
 class FXMLHttpRequest {
   constructor() {

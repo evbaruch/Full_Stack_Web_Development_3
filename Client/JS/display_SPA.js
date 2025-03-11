@@ -30,7 +30,7 @@ function showTemplate(templateId) {
 function renderList() {
   const list = document.getElementById("contactList");
   if (!list) {
-    console.error("contactList element not found");
+    console.log("contactList element not found");
     return;
   }
   list.innerHTML = "";
