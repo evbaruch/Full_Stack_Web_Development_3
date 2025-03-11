@@ -1,4 +1,5 @@
-import Server from "../Server/server.js";
+import UserServer from "../Servers/user_server.js";
+import ContactServer from "../Servers/contact_server.js";
 
 const DROP_PROBABILITY = 0.2; // 20% chance of dropping the request or response
 const Network = {
@@ -15,9 +16,9 @@ const Network = {
       }
 
       request.readyState = 3;
-      //request._triggerOnLoad();
+      request._triggerOnLoad();
 
-      Server.handleRequest(request.method, request.url, data, (response) => {
+      handleRequest(request.method, request.url, data, (response) => {
         const dropProbabilityToClient = Math.random();
         const delayToClient = Math.random() * 500 + 1000; // at least 1 second up to 1.5 seconds
         setTimeout(() => {
@@ -36,5 +37,20 @@ const Network = {
     }, delayToServer);
   },
 };
+
+function handleRequest(method, url, data, callback) {
+  console.log(`Server received request: ${method} ${url}`, data);
+
+  let response = { status: 400, data: { message: "Invalid Request" } };
+  url = url.replace(/^https?:\/\/localhost:\d+/, "");
+
+  if (url.startsWith("/users")) {
+    response = UserServer.handleRequest(method, url, data);
+  } else if (url.startsWith("/contacts")) {
+    response = ContactServer.handleRequest(method, url, data);
+  }
+
+  callback(response);
+}
 
 export default Network;

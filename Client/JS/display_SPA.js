@@ -68,7 +68,6 @@ function renderList() {
     list.innerHTML = `
       <div class='empty-list'>
         <p>No contacts found </p> 
-        <p>Add a new contact to get started</p>
       </div>`;
   }
 }
