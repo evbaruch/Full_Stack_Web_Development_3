@@ -1,4 +1,6 @@
-let contacts = [];
+export let contacts = [];
+export let editIndex = null;
+export let contactId = null;
 
 // showing the login template by default
 document.addEventListener("DOMContentLoaded", () => {
@@ -62,6 +64,13 @@ function renderList() {
       list.appendChild(clone);
     }
   });
+  if (contacts.length === 0) {
+    list.innerHTML = `
+      <div class='empty-list'>
+        <p>No contacts found </p> 
+        <p>Add a new contact to get started</p>
+      </div>`;
+  }
 }
 
 function goToEditContact(event) {

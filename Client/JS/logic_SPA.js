@@ -1,8 +1,7 @@
-import FXMLHttpRequest from "../JS/FAJAX.JS";
+import FXMLHttpRequest from "../../JS/fajax.js";
+import { contacts, editIndex, contactId } from "./display_SPA.js";
 
 let userID = null;
-let editIndex = null;
-let contactId = null;
 
 // Global object to store callback functions
 const callbackRegistry = {};
@@ -11,7 +10,8 @@ function loadContacts() {
   const loadContactsCallback = (xhr) => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log(xhr.responseText);
-      contacts = JSON.parse(xhr.responseText);
+      contacts.length = 0;
+      contacts.push(...JSON.parse(xhr.responseText));
       renderList();
     } else if (xhr.readyState === 4) {
       alert(
@@ -48,7 +48,7 @@ function addContact() {
       // else if (xhr.readyState === 4 && xhr.status === 409) {
       //   loadContacts();
       //   showTemplate("read");
-      // } 
+      // }
       else if (xhr.readyState === 4) {
         alert(
           `Failed to add contact: \nerror code ${xhr.status} 
@@ -82,12 +82,10 @@ function saveEditContact() {
           contactId: contactId,
         };
         showTemplate("read");
-      } 
-      else if (xhr.readyState === 4 && xhr.status === 409) {
+      } else if (xhr.readyState === 4 && xhr.status === 409) {
         loadContacts();
         showTemplate("read");
-      }
-      else if (xhr.readyState === 4) {
+      } else if (xhr.readyState === 4) {
         alert(
           `Failed to save contact: \nerror code ${xhr.status} 
           \n${JSON.parse(xhr.responseText).message}`
@@ -113,7 +111,7 @@ function saveEditContact() {
 
 function deleteContact(event) {
   const index = event.target.getAttribute("data-index");
-  contactId = event.target.getAttribute("data-contact-id");
+  const contactIdToDelete = event.target.getAttribute("data-contact-id");
   let name = contacts[index].name;
 
   const deleteContactCallback = (xhr) => {
@@ -121,11 +119,9 @@ function deleteContact(event) {
       console.log("Contact deleted successfully");
       contacts.splice(index, 1);
       renderList();
-    }
-    else if (xhr.readyState === 4 && xhr.status === 404) {
+    } else if (xhr.readyState === 4 && xhr.status === 404) {
       loadContacts();
-    }
-     else if (xhr.readyState === 4) {
+    } else if (xhr.readyState === 4) {
       alert(
         `Failed to delete contact: \nerror code ${xhr.status} \n${
           JSON.parse(xhr.responseText).message
@@ -136,8 +132,8 @@ function deleteContact(event) {
 
   handleNetworkRequest(
     "DELETE",
-    `http://localhost:3000/contacts/${userID}/${contactId}`,
-    { userID: userID, contactId: contactId },
+    `http://localhost:3000/contacts/${userID}/${contactIdToDelete}`,
+    { userID: userID, contactId: contactIdToDelete },
     deleteContactCallback,
     `retry delete for ${name}`
   );
@@ -147,25 +143,22 @@ function signup() {
   const username = document.getElementById("signupUsername").value.trim();
   const password = document.getElementById("signupPassword").value.trim();
   if (username && password) {
-    const xhr = new FXMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/users/signup");
-    xhr.onload = () => {
+    const signupCallback = (xhr) => {
       if (xhr.readyState === 4 && xhr.status === 201) {
         console.log(xhr.responseText);
         userID = JSON.parse(xhr.responseText).id;
         console.log(userID);
-        alert("Signup successful");
         showTemplate("read");
         loadContacts();
-      } else if (xhr.readyState === 4) {
-        alert(
-          `Failed to signup: \nerror code ${xhr.status} \n${
-            JSON.parse(xhr.responseText).message
-          }`
-        );
       }
     };
-    xhr.send({ username, password });
+    handleNetworkRequest(
+      "POST",
+      "http://localhost:3000/users/signup",
+      { username, password },
+      signupCallback,
+      "retry signup"
+    );
   } else {
     alert("Please enter a username and password");
   }
@@ -175,25 +168,22 @@ function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
   if (username && password) {
-    const xhr = new FXMLHttpRequest();
-    xhr.open("GET", "http://localhost:3000/users");
-    xhr.onload = () => {
+    const LoginCallback = (xhr) => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         console.log(xhr.responseText);
         userID = JSON.parse(xhr.responseText)[0];
         console.log(userID);
-        alert("Login successful");
         showTemplate("read");
         loadContacts();
-      } else if (xhr.readyState === 4) {
-        alert(
-          `Failed to login: \nerror code ${xhr.status} \n${
-            JSON.parse(xhr.responseText).message
-          }`
-        );
       }
     };
-    xhr.send({ username, password });
+    handleNetworkRequest(
+      "GET",
+      "http://localhost:3000/users",
+      { username, password },
+      LoginCallback,
+      "retry login"
+    );
   } else {
     alert("Please enter a username and password");
   }
@@ -201,7 +191,7 @@ function login() {
 
 function logout() {
   userID = null;
-  contacts = [];
+  contacts.length = 0;
   renderList();
   // Redirect to the login template
   showTemplate("signin");
@@ -214,7 +204,8 @@ function searchContact() {
   const searchContactCallback = (xhr) => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log(xhr.responseText);
-      contacts = JSON.parse(xhr.responseText);
+      contacts.length = 0;
+      contacts.push(...JSON.parse(xhr.responseText));
       renderList();
     } else if (xhr.readyState === 4) {
       alert(
@@ -301,7 +292,6 @@ function handleRetryClick() {
 // This means that the functions and variables defined within a module are not accessible outside of that
 // module unless they are explicitly exported. Similarly, to use functions or variables from another module,
 // you need to import them.
-
 
 window.addContact = addContact;
 window.saveEditContact = saveEditContact;
