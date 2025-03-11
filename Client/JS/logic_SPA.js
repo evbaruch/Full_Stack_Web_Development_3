@@ -1,37 +1,11 @@
 import FXMLHttpRequest from "../JS/FAJAX.JS";
 
-let contacts = [];
 let userID = null;
 let editIndex = null;
 let contactId = null;
 
-// showing the login template by default
-document.addEventListener("DOMContentLoaded", () => {
-  showTemplate("signin");
-});
-
 // Global object to store callback functions
 const callbackRegistry = {};
-
-function showTemplate(templateId) {
-  const content = document.getElementById("content");
-  content.innerHTML = "";
-  const template = document.getElementById(`${templateId}-template`).content;
-  const clone = document.importNode(template, true);
-  content.appendChild(clone);
-
-  // Hide nav bar when in signin or signup mode
-  if (templateId === "signin" || templateId === "signup") {
-    document.getElementById("nav-bar").style.display = "none";
-  } else {
-    document.getElementById("nav-bar").style.display = "flex";
-  }
-
-  // Call renderList if the read template is shown
-  if (templateId === "read") {
-    renderList();
-  }
-}
 
 function loadContacts() {
   const loadContactsCallback = (xhr) => {
@@ -91,54 +65,6 @@ function addContact() {
       `retry add for ${name}`
     );
   }
-}
-
-function renderList() {
-  const list = document.getElementById("contactList");
-  if (!list) {
-    console.error("contactList element not found");
-    return;
-  }
-  list.innerHTML = "";
-  const template = document.getElementById("contact-template").content;
-  contacts.forEach((contact, index) => {
-    const clone = document.importNode(template, true);
-    const contactName = clone.querySelector(".contact-name");
-    const contactPhone = clone.querySelector(".contact-phone");
-    const contactEmail = clone.querySelector(".contact-email");
-    const editButton = clone.querySelector(
-      ".contact-actions button:nth-child(1)"
-    );
-    const deleteButton = clone.querySelector(
-      ".contact-actions button:nth-child(2)"
-    );
-
-    if (
-      contactName &&
-      contactPhone &&
-      contactEmail &&
-      editButton &&
-      deleteButton
-    ) {
-      contactName.textContent = contact.name;
-      contactPhone.textContent = contact.phone;
-      contactEmail.textContent = contact.email;
-      editButton.setAttribute("data-index", index);
-      editButton.setAttribute("data-contact-id", contact.contactId);
-      deleteButton.setAttribute("data-index", index);
-      deleteButton.setAttribute("data-contact-id", contact.contactId);
-      list.appendChild(clone);
-    }
-  });
-}
-
-function goToEditContact(event) {
-  editIndex = event.target.getAttribute("data-index");
-  contactId = event.target.getAttribute("data-contact-id");
-  showTemplate("edit");
-  document.getElementById("editContactName").value = contacts[editIndex].name;
-  document.getElementById("editContactPhone").value = contacts[editIndex].phone;
-  document.getElementById("editContactEmail").value = contacts[editIndex].email;
 }
 
 function saveEditContact() {
@@ -376,9 +302,8 @@ function handleRetryClick() {
 // module unless they are explicitly exported. Similarly, to use functions or variables from another module,
 // you need to import them.
 
-window.showTemplate = showTemplate;
+
 window.addContact = addContact;
-window.goToEditContact = goToEditContact;
 window.saveEditContact = saveEditContact;
 window.deleteContact = deleteContact;
 window.signup = signup;
@@ -388,4 +313,3 @@ window.searchContact = searchContact;
 window.handleNetworkRequest = handleNetworkRequest;
 window.handleRetryClick = handleRetryClick;
 window.loadContacts = loadContacts;
-window.renderList = renderList;
