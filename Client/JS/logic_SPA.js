@@ -6,6 +6,11 @@ let userID = null;
 // Global object to store callback functions
 const callbackRegistry = {};
 
+/**
+ * Load all contacts for the current user.
+ * URL: GET http://localhost:3000/contacts/{userID}/all
+ * Data: { currentUser: userID }
+ */
 function loadContacts() {
   const loadContactsCallback = (xhr) => {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -31,6 +36,11 @@ function loadContacts() {
   );
 }
 
+/**
+ * Add a new contact for the current user.
+ * URL: POST http://localhost:3000/contacts/{userID}
+ * Data: { name, phone, email, userID }
+ */
 function addContact() {
   const name = document.getElementById("contactName").value.trim();
   const phone = document.getElementById("contactPhone").value.trim();
@@ -44,12 +54,7 @@ function addContact() {
         document.getElementById("contactPhone").value = "";
         document.getElementById("contactEmail").value = "";
         showTemplate("read");
-      }
-      // else if (xhr.readyState === 4 && xhr.status === 409) {
-      //   loadContacts();
-      //   showTemplate("read");
-      // }
-      else if (xhr.readyState === 4) {
+      } else if (xhr.readyState === 4) {
         alert(
           `Failed to add contact: \nerror code ${xhr.status} 
           \n${JSON.parse(xhr.responseText).message}`
@@ -67,6 +72,11 @@ function addContact() {
   }
 }
 
+/**
+ * Save edited contact for the current user.
+ * URL: PUT http://localhost:3000/contacts/{userID}/{contactId}
+ * Data: { name: newName, phone: newPhone, email: newEmail, userID, contactId }
+ */
 function saveEditContact() {
   const newName = document.getElementById("editContactName").value.trim();
   const newPhone = document.getElementById("editContactPhone").value.trim();
@@ -109,6 +119,11 @@ function saveEditContact() {
   }
 }
 
+/**
+ * Delete a contact for the current user.
+ * URL: DELETE http://localhost:3000/contacts/{userID}/{contactIdToDelete}
+ * Data: { userID, contactId: contactIdToDelete }
+ */
 function deleteContact(event) {
   const index = event.target.getAttribute("data-index");
   const contactIdToDelete = event.target.getAttribute("data-contact-id");
@@ -139,6 +154,11 @@ function deleteContact(event) {
   );
 }
 
+/**
+ * Sign up a new user.
+ * URL: POST http://localhost:3000/users/signup
+ * Data: { username, password }
+ */
 function signup() {
   const username = document.getElementById("signupUsername").value.trim();
   const password = document.getElementById("signupPassword").value.trim();
@@ -164,6 +184,11 @@ function signup() {
   }
 }
 
+/**
+ * Log in an existing user.
+ * URL: GET http://localhost:3000/users
+ * Data: { username, password }
+ */
 function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -189,6 +214,9 @@ function login() {
   }
 }
 
+/**
+ * Log out the current user.
+ */
 function logout() {
   userID = null;
   contacts.length = 0;
@@ -197,7 +225,11 @@ function logout() {
   showTemplate("signin");
 }
 
-// search function
+/**
+ * Search for contacts.
+ * URL: GET http://localhost:3000/contacts/{userID}/search
+ * Data: { currentUser: userID, search }
+ */
 function searchContact() {
   const search = document.getElementById("searchInput").value.trim();
 
@@ -225,7 +257,15 @@ function searchContact() {
   );
 }
 
-function handleNetworkRequest(method, url, data, callback, buttenText) {
+/**
+ * Handle network requests with retry functionality.
+ * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+ * @param {string} url - URL for the request
+ * @param {object} data - Data to be sent with the request
+ * @param {function} callback - Callback function to handle the response
+ * @param {string} buttonText - Text for the retry button
+ */
+function handleNetworkRequest(method, url, data, callback, buttonText) {
   const button = document.getElementById("retryButton");
   button.classList.add("hidden");
   const loader = document.getElementById("loader");
@@ -251,7 +291,7 @@ function handleNetworkRequest(method, url, data, callback, buttenText) {
     if (xhr.readyState !== 4) {
       button.classList.remove("hidden");
       button.style.pointerEvents = "auto";
-      button.textContent = buttenText;
+      button.textContent = buttonText;
       loader.classList.add("hidden");
     } else {
       loader.classList.add("hidden");
@@ -259,8 +299,10 @@ function handleNetworkRequest(method, url, data, callback, buttenText) {
   }, 4000);
 }
 
+/**
+ * Handle retry button click to retry the network request.
+ */
 function handleRetryClick() {
-  // TODO: add a animation of loading
   const button = document.getElementById("retryButton");
 
   // Retrieve stored parameters from data attributes

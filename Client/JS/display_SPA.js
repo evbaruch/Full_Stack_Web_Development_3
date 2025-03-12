@@ -2,11 +2,15 @@ export let contacts = [];
 export let editIndex = null;
 export let contactId = null;
 
-// showing the login template by default
+// Show the login template by default when the document is loaded
 document.addEventListener("DOMContentLoaded", () => {
   showTemplate("signin");
 });
 
+/**
+ * Show the specified template.
+ * @param {string} templateId - The ID of the template to show.
+ */
 function showTemplate(templateId) {
   const content = document.getElementById("content");
   content.innerHTML = "";
@@ -27,6 +31,9 @@ function showTemplate(templateId) {
   }
 }
 
+/**
+ * Render the list of contacts.
+ */
 function renderList() {
   const list = document.getElementById("contactList");
   if (!list) {
@@ -67,11 +74,15 @@ function renderList() {
   if (contacts.length === 0) {
     list.innerHTML = `
       <div class='empty-list'>
-        <p>No contacts found </p> 
+        <p>No contacts found</p> 
       </div>`;
   }
 }
 
+/**
+ * Navigate to the edit contact template and populate the fields with the selected contact's data.
+ * @param {Event} event - The event triggered by clicking the edit button.
+ */
 function goToEditContact(event) {
   editIndex = event.target.getAttribute("data-index");
   contactId = event.target.getAttribute("data-contact-id");
@@ -81,6 +92,7 @@ function goToEditContact(event) {
   document.getElementById("editContactEmail").value = contacts[editIndex].email;
 }
 
+// Expose functions to the global scope for use in HTML
 window.renderList = renderList;
 window.showTemplate = showTemplate;
 window.goToEditContact = goToEditContact;

@@ -1,32 +1,45 @@
 import Network from "./network.js";
 
 class FXMLHttpRequest {
-  constructor() {
-      this.readyState = 0;
-      this.status = 0;
-      this.responseText = "";
-      this.onload = null;
-  }
+    constructor() {
+        this.readyState = 0;
+        this.status = 0;
+        this.responseText = "";
+        this.onload = null;
+    }
 
-  open(method, url) {
-      this.method = method;
-      this.url = url;
-      this.readyState = 1;
-      this._triggerOnLoad();
-  }
+    /**
+     * Initialize a request.
+     * @param {string} method - The HTTP method (GET, POST, PUT, DELETE).
+     * @param {string} url - The URL of the request.
+     */
+    open(method, url) {
+        this.method = method;
+        this.url = url;
+        this.readyState = 1;
+        this._triggerOnLoad();
+    }
 
-  send(data = null) {
-      this.readyState = 2;
-      this._triggerOnLoad();
-      
-      Network.sendRequest(this, data);
-  }
+    /**
+     * Send the request with optional data.
+     * @param {object} data - The data to be sent with the request.
+     */
+    send(data = null) {
+        this.readyState = 2;
+        this._triggerOnLoad();
 
-  _triggerOnLoad() {
-      if (this.onload) {
-          this.onload();
-      }
-  }
+        Network.sendRequest(this, data);
+    }
+
+    /**
+     * Trigger the onload event if it is defined.
+     * This method simulates the onload event of a real XMLHttpRequest.
+     */
+    _triggerOnLoad() {
+        if (this.onload) {
+            this.onload();
+        }
+    }
 }
 
 export default FXMLHttpRequest;

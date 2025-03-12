@@ -15,11 +15,13 @@
     <script src="/Client/JS/display_SPA.js" type="module"></script>
   </head>
   <body>
+    <!-- Navigation bar -->
     <nav id="nav-bar" class="hidden">
       <button onclick="logout()">Logout</button>
     </nav>
 
     <div class="container">
+      <!-- Retry button and loader -->
       <div class="retry-container">
         <button
           id="retryButton"
@@ -31,8 +33,10 @@
         <div id="loader" class="hidden loader" alt="retry"></div>
       </div>
 
+      <!-- Main content area -->
       <div id="content"></div>
 
+      <!-- Template for creating a new contact -->
       <template id="create-template">
         <div id="create" class="template-section">
           <h2>Add Contact</h2>
@@ -58,6 +62,7 @@
         </div>
       </template>
 
+      <!-- Template for reading the contact list -->
       <template id="read-template">
         <div id="read" class="template-section">
           <h1>Contact List</h1>
@@ -86,6 +91,7 @@
         </div>
       </template>
 
+      <!-- Template for editing a contact -->
       <template id="edit-template">
         <div id="edit" class="template-section">
           <h2>Edit Contact</h2>
@@ -115,6 +121,7 @@
         </div>
       </template>
 
+      <!-- Template for signing in -->
       <template id="signin-template">
         <div id="signin" class="template-section">
           <div class="form-container">
@@ -129,6 +136,7 @@
         </div>
       </template>
 
+      <!-- Template for signing up -->
       <template id="signup-template">
         <div id="signup" class="template-section">
           <div class="form-container">
@@ -151,6 +159,7 @@
         </div>
       </template>
 
+      <!-- Template for displaying a contact item -->
       <template id="contact-template">
         <div class="contact-item">
           <img
