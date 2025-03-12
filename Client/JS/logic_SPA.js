@@ -170,6 +170,12 @@ function signup() {
         console.log(userID);
         showTemplate("read");
         loadContacts();
+      } else if (xhr.readyState === 4 && xhr.status === 409) {
+        alert(
+          `Failed to signup: \nerror code ${xhr.status} \n${
+            JSON.parse(xhr.responseText).message
+          }`
+        );
       }
     };
     handleNetworkRequest(
