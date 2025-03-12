@@ -14,6 +14,9 @@ const DataBase = {
   },
 
   addUser(users, data) {
+    if (this.findUser(users, data.username, data.password)) {
+      return null;
+    }
     const userId = Date.now().toString();
     users[userId] = { id: userId, ...data };
     this.setItem("users", users);

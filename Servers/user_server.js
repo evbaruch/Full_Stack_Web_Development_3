@@ -9,6 +9,9 @@ const UserServer = {
         return { status: 200, data: user ? Object.values(user) : null };
       case "POST":
         const newUser = DataBase.addUser(users, data);
+        if (!newUser) {
+          return { status: 409, data: { message: "User already exists" } };
+        }
         return { status: 201, data: newUser };
       default:
         return { status: 400, data: { message: "Invalid User Request" } };
